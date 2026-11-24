@@ -34,8 +34,12 @@ class Settings(BaseSettings):
 
     def get_allowed_origins_list(self) -> List[str]:
         if not self.ALLOWED_ORIGINS:
-            return ["http://localhost:3000"]
-        return [origin.strip() for origin in self.ALLOWED_ORIGINS.split(",") if origin.strip()]
+            return ["http://localhost:3000", "https://craftmind-frontend.vercel.app"]
+        origins = [origin.strip() for origin in self.ALLOWED_ORIGINS.split(",") if origin.strip()]
+        for default_origin in ["http://localhost:3000", "https://craftmind-frontend.vercel.app"]:
+            if default_origin not in origins:
+                origins.append(default_origin)
+        return origins
 
     def get_sqlite_path(self) -> str:
         """
