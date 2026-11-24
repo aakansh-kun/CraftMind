@@ -6,6 +6,11 @@ export default function ChatMessage({ message, onOpenVisualizer }) {
   const metadata = message.metadata;
   const viz = message.visualization;
 
+  // Strip craftmind-viz / json:viz code block so user only sees clean Markdown in chat
+  const displayContent = isAssistant && message.content
+    ? message.content.replace(/```(?:craftmind-viz|json:viz)\s*[\s\S]*?```/g, '').trim()
+    : message.content;
+
   return (
     <div
       className={`chat-row ${isAssistant ? 'row-assistant' : 'row-user'}`}
@@ -31,7 +36,7 @@ export default function ChatMessage({ message, onOpenVisualizer }) {
         {/* Message Content */}
         <div className="message-text">
           {isAssistant ? (
-            <MarkdownRenderer content={message.content} />
+            <MarkdownRenderer content={displayContent} />
           ) : (
             <div className="user-plain-text">{message.content}</div>
           )}

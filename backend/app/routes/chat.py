@@ -2,7 +2,7 @@ from typing import Optional
 from fastapi import APIRouter, Header, HTTPException
 from app.schemas import ChatRequest, ChatResponse
 from app.services.session_service import get_history_for_llm, save_turn
-from app.services.llm_service import execute_chat_turn, DEFAULT_SYSTEM_PROMPT
+from app.services.llm_service import execute_chat_turn, DEFAULT_SYSTEM_PROMPT, get_system_prompt_for_mode
 
 router = APIRouter(tags=["chat"])
 
@@ -21,7 +21,7 @@ async def post_chat(
     history = get_history_for_llm(req.session_id)
 
     # 2. Determine system prompt (override if provided in request)
-    system_prompt = req.system_prompt if req.system_prompt else DEFAULT_SYSTEM_PROMPT
+    system_prompt = req.system_prompt if req.system_prompt else get_system_prompt_for_mode(req.mode)
 
     # 3. Construct the complete LLM message list:
     #    [system prompt] + [previous user/assistant messages] + [new user message]

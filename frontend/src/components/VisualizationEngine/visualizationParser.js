@@ -816,34 +816,152 @@ const CANONICAL_TEMPLATES = {
 };
 
 /**
+ * Strict validator for dynamic LLM craftmind-viz JSON.
+ * Rejects malicious scripts, out-of-bound coords, absurd dimensions, and negative values.
+ */
+export function validateDynamicBuildModel(parsed) {
+  if (!parsed || typeof parsed !== 'object') return null;
+  const vizType = String(parsed.type || 'build').toLowerCase();
+
+  // Allow non-build types to pass through if structured
+  if (vizType !== 'build') {
+    return parsed;
+  }
+
+  // 1. Dimensions check: width, length, height must be positive integers between 1 and 32
+  const dims = parsed.dimensions;
+  if (!dims || typeof dims !== 'object') return null;
+  const width = Math.floor(Number(dims.width));
+  const length = Math.floor(Number(dims.length));
+  const height = Math.floor(Number(dims.height));
+
+  if (!Number.isFinite(width) || width < 1 || width > 32) return null;
+  if (!Number.isFinite(length) || length < 1 || length > 32) return null;
+  if (!Number.isFinite(height) || height < 1 || height > 32) return null;
+
+  // Max volume guard: prevent browser lockup
+  if (width * length * height > 16000) return null;
+
+  const sanitized = {
+    schema_version: Number(parsed.schema_version) || 1,
+    type: 'build',
+    title: String(parsed.title || 'Minecraft Construction Blueprint').replace(/[<>]/g, '').slice(0, 60),
+    edition: String(parsed.edition || 'Java & Bedrock 1.21.x').replace(/[<>]/g, '').slice(0, 40),
+    version: String(parsed.version || '1.21.x').replace(/[<>]/g, '').slice(0, 20),
+    dimensions: { width, length, height },
+    materials: [],
+    steps: [],
+    blocks: [],
+    simulation: parsed.simulation || null,
+  };
+
+  // 2. Validate blocks (if provided)
+  if (Array.isArray(parsed.blocks) && parsed.blocks.length > 0) {
+    const validBlocks = [];
+    // Max 500 blocks for performance
+    const rawBlocks = parsed.blocks.slice(0, 500);
+
+    for (const b of rawBlocks) {
+      if (!b || typeof b !== 'object') continue;
+      const x = Math.floor(Number(b.x));
+      const y = Math.floor(Number(b.y));
+      const z = Math.floor(Number(b.z));
+
+      // Coordinate bounds check: 0 <= x < width, 0 <= y < height, 0 <= z < length
+      if (x < 0 || x >= width || y < 0 || y >= height || z < 0 || z >= length) {
+        continue;
+      }
+
+      const blockType = String(b.type || 'stone').replace(/[<>]/g, '').slice(0, 40);
+      const step = Math.max(1, Math.floor(Number(b.step) || (y + 1)));
+
+      validBlocks.push({ x, y, z, type: blockType, step });
+    }
+
+    if (validBlocks.length > 0) {
+      sanitized.blocks = validBlocks;
+    }
+  }
+
+  // 3. Validate layers (if provided instead of blocks)
+  if (Array.isArray(parsed.layers) && parsed.layers.length > 0) {
+    const validLayers = [];
+    for (let lIdx = 0; lIdx < Math.min(parsed.layers.length, height); lIdx++) {
+      const l = parsed.layers[lIdx];
+      if (!l || typeof l !== 'object') continue;
+      const grid = Array.isArray(l.grid) ? l.grid : [];
+      validLayers.push({
+        level: lIdx + 1,
+        name: String(l.name || `Layer ${lIdx + 1}`).replace(/[<>]/g, '').slice(0, 40),
+        grid: grid.map((row) =>
+          Array.isArray(row)
+            ? row.map((cell) => String(cell || 'air').replace(/[<>]/g, '').slice(0, 40))
+            : []
+        ),
+      });
+    }
+    if (validLayers.length > 0) {
+      sanitized.layers = validLayers;
+    }
+  }
+
+  // Must have either valid blocks or valid layers
+  if (sanitized.blocks.length === 0 && (!sanitized.layers || sanitized.layers.length === 0)) {
+    return null;
+  }
+
+  // 4. Validate materials
+  if (Array.isArray(parsed.materials)) {
+    for (const m of parsed.materials) {
+      if (!m || typeof m !== 'object') continue;
+      const name = String(m.name || m.type || 'Material').replace(/[<>]/g, '').slice(0, 40);
+      const qty = Math.max(1, Math.min(10000, Math.floor(Number(m.quantity) || 1)));
+      const type = String(m.type || m.id || 'stone').replace(/[<>]/g, '').slice(0, 40);
+      sanitized.materials.push({
+        id: type,
+        type: type,
+        name: name,
+        quantity: qty,
+        icon: m.icon || '🧱',
+      });
+    }
+  }
+
+  // 5. Validate steps
+  if (Array.isArray(parsed.steps)) {
+    for (let sIdx = 0; sIdx < parsed.steps.length; sIdx++) {
+      const s = parsed.steps[sIdx];
+      if (!s || typeof s !== 'object') continue;
+      sanitized.steps.push({
+        number: sIdx + 1,
+        title: String(s.title || `Step ${sIdx + 1}`).replace(/[<>]/g, '').slice(0, 60),
+        description: String(s.description || '').replace(/[<>]/g, '').slice(0, 240),
+        layer: Math.min(height, Math.max(1, Math.floor(Number(s.layer) || (sIdx + 1)))),
+      });
+    }
+  }
+
+  return sanitized;
+}
+
+/**
  * Parses assistant message and returns structured visualization object if appropriate.
+ * Follows the strict rule:
+ * 1. Check exact canonical templates FIRST.
+ * 2. If no exact template match, check for validated dynamic craftmind-viz JSON.
+ * 3. Never substitute an unrelated blueprint.
  */
 export function parseVisualizationData(messageContent, userPrompt = '', activeMode = 'BUILD') {
   if (!messageContent) return null;
 
-  // 1. Check for explicit JSON block tagged craftmind-viz
-  const vizBlockRegex = /```(?:craftmind-viz|json:viz)\s*([\s\S]*?)```/;
-  const match = messageContent.match(vizBlockRegex);
-  if (match && match[1]) {
-    try {
-      const parsed = JSON.parse(match[1].trim());
-      if (parsed && parsed.type) {
-        return parsed;
-      }
-    } catch (e) {
-      console.warn('Failed to parse craftmind-viz json block:', e);
-    }
-  }
-
-  // 2. Keyword & semantic matching for dedicated canonical blueprints
   const combined = (userPrompt + ' ' + messageContent).toLowerCase();
 
+  // 1. Check exact canonical templates ONLY when intentionally matching
   // BUILD: Gold Farm (Zombie Piglin Nether Portal Farm)
   if (
     combined.includes('gold farm') ||
     combined.includes('piglin farm') ||
-    (combined.includes('zombie piglin') && combined.includes('farm')) ||
-    (combined.includes('gold') && combined.includes('farm') && !combined.includes('iron'))
+    (combined.includes('zombie piglin') && combined.includes('farm'))
   ) {
     return CANONICAL_TEMPLATES.gold_farm;
   }
@@ -857,7 +975,7 @@ export function parseVisualizationData(messageContent, userPrompt = '', activeMo
   if (
     combined.includes('medieval tower') ||
     combined.includes('watchtower') ||
-    (combined.includes('tower') && (combined.includes('medieval') || combined.includes('stone') || combined.includes('sentry')))
+    (combined.includes('tower') && (combined.includes('medieval') || combined.includes('sentry')))
   ) {
     return CANONICAL_TEMPLATES.medieval_tower;
   }
@@ -865,10 +983,8 @@ export function parseVisualizationData(messageContent, userPrompt = '', activeMo
   // BUILD: Starter House / Cottage / Base
   if (
     combined.includes('starter house') ||
-    combined.includes('starter base') ||
     combined.includes('starter cottage') ||
-    combined.includes('cozy cottage') ||
-    combined.includes('simple house')
+    combined.includes('cozy cottage')
   ) {
     return CANONICAL_TEMPLATES.starter_house;
   }
@@ -877,35 +993,41 @@ export function parseVisualizationData(messageContent, userPrompt = '', activeMo
   if (
     combined.includes('piston door') ||
     combined.includes('2x2 door') ||
-    combined.includes('flush door') ||
-    combined.includes('hidden door') ||
-    (activeMode === 'REDSTONE' && combined.includes('door'))
+    combined.includes('flush door')
   ) {
     return CANONICAL_TEMPLATES.piston_door;
   }
 
-  // SURVIVAL: Ender dragon / Nether
+  // SURVIVAL: Ender dragon
   if (
     combined.includes('ender dragon') ||
     combined.includes('dragon fight') ||
-    combined.includes('beat the dragon') ||
-    combined.includes('the end crystals') ||
-    (activeMode === 'SURVIVAL' && (combined.includes('dragon') || combined.includes('boss')))
+    combined.includes('beat the dragon')
   ) {
     return CANONICAL_TEMPLATES.ender_dragon;
   }
 
-  // CREATE: Mod / Datapack / Custom Sword
-  if (
-    combined.includes('sword mod') ||
-    combined.includes('custom sword') ||
-    combined.includes('custom item') ||
-    (activeMode === 'CREATE' && (combined.includes('sword') || combined.includes('item')))
-  ) {
+  // CREATE: Custom Sword Mod
+  if (combined.includes('sword mod') || combined.includes('custom sword')) {
     return CANONICAL_TEMPLATES.custom_sword;
   }
 
+  // 2. Dynamic generation: Check for structured craftmind-viz JSON block from LLM
+  const vizBlockRegex = /```(?:craftmind-viz|json:viz)\s*([\s\S]*?)```/;
+  const match = messageContent.match(vizBlockRegex);
+  if (match && match[1]) {
+    try {
+      const parsed = JSON.parse(match[1].trim());
+      const validated = validateDynamicBuildModel(parsed);
+      if (validated) {
+        return validated;
+      }
+    } catch (e) {
+      console.warn('Failed to parse craftmind-viz json block:', e);
+    }
+  }
+
   // STRICT REQUIREMENT: If the response has no valid BuildModel, return null.
-  // NEVER substitute sample, demo, or unrelated blueprints (e.g. Medieval Watchtower for Gold Farm).
+  // NEVER substitute sample, demo, or unrelated blueprints.
   return null;
 }

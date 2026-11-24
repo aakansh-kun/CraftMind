@@ -322,6 +322,246 @@ export const BLOCK_CATALOG = {
     pattern: 'glass',
     textColor: '#ffffff',
     isTransparent: true,
+  },
+  sugarcane: {
+    id: 'sugarcane',
+    name: 'Sugar Cane',
+    icon: '🎋',
+    topColor: '#22c55e',
+    leftColor: '#16a34a',
+    rightColor: '#15803d',
+    pattern: 'plant',
+    textColor: '#ffffff',
+  },
+  bamboo: {
+    id: 'bamboo',
+    name: 'Bamboo Stalk',
+    icon: '🎍',
+    topColor: '#4ade80',
+    leftColor: '#22c55e',
+    rightColor: '#16a34a',
+    pattern: 'plant',
+    textColor: '#0f172a',
+  },
+  sand: {
+    id: 'sand',
+    name: 'Sand',
+    icon: '🏖️',
+    topColor: '#fef08a',
+    leftColor: '#fde047',
+    rightColor: '#eab308',
+    pattern: 'noise',
+    textColor: '#713f12',
+  },
+  dirt: {
+    id: 'dirt',
+    name: 'Dirt Block',
+    icon: '🟫',
+    topColor: '#78350f',
+    leftColor: '#581c87',
+    rightColor: '#451a03',
+    pattern: 'noise',
+    textColor: '#ffffff',
+  },
+  farmland: {
+    id: 'farmland',
+    name: 'Farmland (Tilled)',
+    icon: '🌱',
+    topColor: '#451a03',
+    leftColor: '#291002',
+    rightColor: '#1c0b02',
+    pattern: 'smooth',
+    textColor: '#ffffff',
+  },
+  observer: {
+    id: 'observer',
+    name: 'Observer',
+    icon: '👁️',
+    topColor: '#334155',
+    leftColor: '#1e293b',
+    rightColor: '#0f172a',
+    pattern: 'circuit',
+    textColor: '#ffffff',
+  },
+  dispenser: {
+    id: 'dispenser',
+    name: 'Dispenser / Dropper',
+    icon: '🎯',
+    topColor: '#475569',
+    leftColor: '#334155',
+    rightColor: '#1e293b',
+    pattern: 'device',
+    textColor: '#ffffff',
+  },
+  fence: {
+    id: 'fence',
+    name: 'Fence',
+    icon: '🚧',
+    topColor: '#b45309',
+    leftColor: '#92400e',
+    rightColor: '#78350f',
+    pattern: 'wood',
+    textColor: '#ffffff',
+  },
+  iron_bars: {
+    id: 'iron_bars',
+    name: 'Iron Bars',
+    icon: '⛓️',
+    topColor: '#94a3b8',
+    leftColor: '#64748b',
+    rightColor: '#475569',
+    pattern: 'metal',
+    textColor: '#ffffff',
+  },
+  lantern: {
+    id: 'lantern',
+    name: 'Lantern',
+    icon: '🏮',
+    topColor: '#fde047',
+    leftColor: '#eab308',
+    rightColor: '#334155',
+    pattern: 'torch',
+    textColor: '#0f172a',
+  },
+  ladder: {
+    id: 'ladder',
+    name: 'Ladder',
+    icon: '🪜',
+    topColor: '#b45309',
+    leftColor: '#92400e',
+    rightColor: '#78350f',
+    pattern: 'wood',
+    textColor: '#ffffff',
+  },
+  crafting_table: {
+    id: 'crafting_table',
+    name: 'Crafting Table',
+    icon: '🪑',
+    topColor: '#a16207',
+    leftColor: '#854d0e',
+    rightColor: '#713f12',
+    pattern: 'wood',
+    textColor: '#ffffff',
+  },
+  furnace: {
+    id: 'furnace',
+    name: 'Furnace',
+    icon: '🔥',
+    topColor: '#57534e',
+    leftColor: '#44403c',
+    rightColor: '#292524',
+    pattern: 'bricks',
+    textColor: '#ffffff',
+  },
+  barrel: {
+    id: 'barrel',
+    name: 'Storage Barrel',
+    icon: '🛢️',
+    topColor: '#92400e',
+    leftColor: '#78350f',
+    rightColor: '#451a03',
+    pattern: 'wood',
+    textColor: '#ffffff',
+  },
+  enchanting_table: {
+    id: 'enchanting_table',
+    name: 'Enchanting Table',
+    icon: '📖',
+    topColor: '#831843',
+    leftColor: '#701a75',
+    rightColor: '#4c0519',
+    pattern: 'dark',
+    textColor: '#ffffff',
+  },
+  bookshelf: {
+    id: 'bookshelf',
+    name: 'Bookshelf',
+    icon: '📚',
+    topColor: '#78350f',
+    leftColor: '#451a03',
+    rightColor: '#291002',
+    pattern: 'wood',
+    textColor: '#ffffff',
+  },
+  spruce_planks: {
+    id: 'spruce_planks',
+    name: 'Spruce Planks',
+    icon: '🪵',
+    topColor: '#583210',
+    leftColor: '#40240b',
+    rightColor: '#2c1806',
+    pattern: 'wood',
+    textColor: '#ffffff',
+  },
+  spruce_log: {
+    id: 'spruce_log',
+    name: 'Spruce Log',
+    icon: '🪵',
+    topColor: '#381e09',
+    leftColor: '#261405',
+    rightColor: '#180b02',
+    pattern: 'bark',
+    textColor: '#ffffff',
+  },
+  quartz: {
+    id: 'quartz',
+    name: 'Block of Quartz',
+    icon: '🏛️',
+    topColor: '#f8fafc',
+    leftColor: '#e2e8f0',
+    rightColor: '#cbd5e1',
+    pattern: 'smooth',
+    textColor: '#0f172a',
+  },
+  concrete: {
+    id: 'concrete',
+    name: 'Concrete',
+    icon: '🏢',
+    topColor: '#38bdf8',
+    leftColor: '#0284c7',
+    rightColor: '#0369a1',
+    pattern: 'smooth',
+    textColor: '#ffffff',
+  },
+  terracotta: {
+    id: 'terracotta',
+    name: 'Terracotta',
+    icon: '🏺',
+    topColor: '#c2410c',
+    leftColor: '#9a3412',
+    rightColor: '#7c2d12',
+    pattern: 'smooth',
+    textColor: '#ffffff',
+  },
+  soul_sand: {
+    id: 'soul_sand',
+    name: 'Soul Sand',
+    icon: '🟤',
+    topColor: '#451a03',
+    leftColor: '#260e02',
+    rightColor: '#1a0901',
+    pattern: 'noise',
+    textColor: '#ffffff',
+  },
+  nether_bricks: {
+    id: 'nether_bricks',
+    name: 'Nether Bricks',
+    icon: '🧱',
+    topColor: '#581c87',
+    leftColor: '#4c1d95',
+    rightColor: '#3b0764',
+    pattern: 'bricks',
+    textColor: '#ffffff',
+  },
+  generic_block: {
+    id: 'generic_block',
+    name: 'Building Block',
+    icon: '🧱',
+    topColor: '#64748b',
+    leftColor: '#475569',
+    rightColor: '#334155',
+    pattern: 'smooth',
+    textColor: '#ffffff',
   }
 };
 
@@ -330,8 +570,20 @@ export const BLOCK_CATALOG = {
  */
 export function normalizeBlockType(raw) {
   if (!raw || typeof raw !== 'string') return 'stone';
-  const clean = raw.toLowerCase().replace(/[\s\-_]+/g, '_').trim();
+  const clean = raw.toLowerCase().replace(/[\s\-_]+/g, '_').replace(/^minecraft:/, '').trim();
 
+  if (BLOCK_CATALOG[clean]) return clean;
+
+  if (clean.includes('sugar') || clean.includes('cane')) return 'sugarcane';
+  if (clean.includes('bamboo')) return 'bamboo';
+  if (clean.includes('sand') && clean.includes('soul')) return 'soul_sand';
+  if (clean.includes('sand')) return 'sand';
+  if (clean.includes('farm')) return 'farmland';
+  if (clean.includes('dirt') || clean.includes('grass')) return 'dirt';
+  if (clean.includes('observer')) return 'observer';
+  if (clean.includes('dispenser')) return 'dispenser';
+  if (clean.includes('dropper')) return 'dispenser';
+  if (clean.includes('brick') && clean.includes('nether')) return 'nether_bricks';
   if (clean.includes('brick')) return 'stone_bricks';
   if (clean.includes('cobble')) return 'cobblestone';
   if (clean.includes('glass')) return 'glass';
@@ -346,26 +598,41 @@ export function normalizeBlockType(raw) {
   if (clean.includes('boat')) return 'boat';
   if (clean.includes('slab')) return 'slab';
   if (clean.includes('stair')) return 'stair';
-  if (clean.includes('log')) return 'oak_log';
+  if (clean.includes('spruce') && clean.includes('log')) return 'spruce_log';
+  if (clean.includes('spruce')) return 'spruce_planks';
+  if (clean.includes('log') || clean.includes('wood_log') || clean.includes('stem')) return 'oak_log';
   if (clean.includes('plank') || clean.includes('wood')) return 'oak_planks';
+  if (clean.includes('fence')) return 'fence';
+  if (clean.includes('door') && clean.includes('trap')) return 'trapdoor';
+  if (clean.includes('trapdoor')) return 'trapdoor';
   if (clean.includes('door')) return 'door';
+  if (clean.includes('iron') && clean.includes('bar')) return 'iron_bars';
+  if (clean.includes('lantern')) return 'lantern';
+  if (clean.includes('ladder')) return 'ladder';
   if (clean.includes('torch') && clean.includes('redstone')) return 'redstone_torch';
   if (clean.includes('torch')) return 'torch';
   if (clean.includes('sticky')) return 'sticky_piston';
   if (clean.includes('piston')) return 'piston';
   if (clean.includes('repeater')) return 'repeater';
+  if (clean.includes('comparator')) return 'repeater';
   if (clean.includes('redstone') || clean.includes('wire')) return 'redstone_wire';
   if (clean.includes('lever')) return 'lever';
   if (clean.includes('obsidian')) return 'obsidian';
   if (clean.includes('magma')) return 'magma';
   if (clean.includes('gold')) return 'gold_block';
-  if (clean.includes('trapdoor')) return 'trapdoor';
+  if (clean.includes('quartz')) return 'quartz';
+  if (clean.includes('concrete')) return 'concrete';
+  if (clean.includes('terracotta') || clean.includes('clay')) return 'terracotta';
+  if (clean.includes('crafting')) return 'crafting_table';
+  if (clean.includes('furnace') || clean.includes('smoker')) return 'furnace';
+  if (clean.includes('barrel')) return 'barrel';
+  if (clean.includes('enchant')) return 'enchanting_table';
+  if (clean.includes('book')) return 'bookshelf';
   if (clean.includes('portal')) return 'portal';
   if (clean.includes('hole') || clean.includes('chute')) return 'chute';
   if (clean.includes('air') || clean === 'none' || clean === 'empty') return 'air';
 
-  if (BLOCK_CATALOG[clean]) return clean;
-  return 'stone_bricks';
+  return 'generic_block';
 }
 
 /**
