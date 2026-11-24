@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  craftmind-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: craftmind-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini/gemini-flash-lite-latest}
+      - GROQ_MODEL=${GROQ_MODEL:-groq/openai/gpt-oss-20b}
+      - LLM_API_KEYS=${LLM_API_KEYS:-key_1:gemini,key_2:groq}
+      - DATABASE_URL=${DATABASE_URL:-sqlite:////data/app.db}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-http://localhost:3000}
+      - ENABLE_FAILURE_SIMULATION=${ENABLE_FAILURE_SIMULATION:-true}
+      - ENABLE_CACHE=${ENABLE_CACHE:-true}
+    volumes:
+      - craftmind-data:/data
+    restart: unless-stopped
+
+  craftmind-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL:-http://localhost:8000}
+    container_name: craftmind-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - craftmind-backend
+    restart: unless-stopped
+
+volumes:
+  craftmind-data:
+    name: craftmind-data
