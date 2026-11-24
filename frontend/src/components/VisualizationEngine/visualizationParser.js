@@ -7,6 +7,381 @@
 
 // Canonical templates for classic Minecraft requests
 const CANONICAL_TEMPLATES = {
+  gold_farm: {
+    type: 'build',
+    title: 'Nether Portal Zombie Piglin Gold Farm',
+    edition: 'Java & Bedrock 1.20+',
+    dimensions: { width: 7, length: 7, height: 8 },
+    materials: [
+      { id: 'obsidian', name: 'Obsidian Portal Blocks', quantity: 64, icon: '🔮' },
+      { id: 'magma', name: 'Magma Blocks', quantity: 48, icon: '🌋' },
+      { id: 'glass', name: 'Glass Viewing Blocks', quantity: 32, icon: '🔲' },
+      { id: 'hopper', name: 'Hoppers', quantity: 4, icon: '📥' },
+      { id: 'chest', name: 'Double Chest', quantity: 2, icon: '📦' },
+      { id: 'trapdoor', name: 'Oak Trapdoors', quantity: 8, icon: '🪵' },
+      { id: 'stone_bricks', name: 'Stone Bricks', quantity: 48, icon: '🧱' },
+      { id: 'slab', name: 'Stone Slabs', quantity: 16, icon: '➖' },
+      { id: 'water', name: 'Water Buckets', quantity: 2, icon: '💧' }
+    ],
+    steps: [
+      { number: 1, title: 'Ground Collection Vault', description: 'Place double chest connected to 4 collection hoppers, capped with stone slabs for safe kill zone.', layer: 1 },
+      { number: 2, title: 'Reinforced Drop Chute', description: 'Surround the hoppers with glass and stone brick walls to contain falling Zombified Piglins.', layer: 2 },
+      { number: 3, title: 'Fall Softening Chute', description: 'Extend the drop chute upward to guarantee exactly 22 blocks of fall damage.', layer: 3 },
+      { number: 4, title: 'Magma Spawning Platform', description: 'Construct a 7x7 spawning floor of magma blocks with a 2x2 central drop opening.', layer: 4 },
+      { number: 5, title: 'Trapdoor Deception Rim', description: 'Line the chute opening with open wooden trapdoors; Piglins perceive them as solid floor and plunge.', layer: 4 },
+      { number: 6, title: 'Nether Portal Ignition Base', description: 'Erect massive obsidian portal frames along the platform perimeter for rapid tick spawning.', layer: 5 },
+      { number: 7, title: 'Upper Portal Columns', description: 'Raise obsidian vertical pillars to complete the 23-block high Nether Portal matrix.', layer: 6 },
+      { number: 8, title: 'Water Flush & Obsidian Cap', description: 'Cap top portal beam and install directional water streams funneling mobs into chute.', layer: 7 }
+    ],
+    layers: [
+      {
+        level: 1,
+        name: 'L1: Vault & Hopper Base',
+        grid: [
+          ['stone', 'stone', 'stone', 'stone', 'stone', 'stone', 'stone'],
+          ['stone', 'stone', 'stone', 'stone', 'stone', 'stone', 'stone'],
+          ['stone', 'chest', 'hopper', 'hopper', 'stone', 'stone', 'stone'],
+          ['stone', 'chest', 'hopper', 'hopper', 'stone', 'stone', 'stone'],
+          ['stone', 'stone', 'stone', 'stone', 'stone', 'stone', 'stone'],
+          ['stone', 'stone', 'stone', 'stone', 'stone', 'stone', 'stone'],
+          ['stone', 'stone', 'stone', 'stone', 'stone', 'stone', 'stone']
+        ]
+      },
+      {
+        level: 2,
+        name: 'L2: Lower Glass Drop Shaft',
+        grid: [
+          ['stone', 'stone', 'stone', 'stone', 'stone', 'stone', 'stone'],
+          ['stone', 'stone', 'stone', 'stone', 'stone', 'stone', 'stone'],
+          ['stone', 'glass', 'slab', 'slab', 'glass', 'stone', 'stone'],
+          ['stone', 'glass', 'slab', 'slab', 'glass', 'stone', 'stone'],
+          ['stone', 'stone', 'stone', 'stone', 'stone', 'stone', 'stone'],
+          ['stone', 'stone', 'stone', 'stone', 'stone', 'stone', 'stone'],
+          ['stone', 'stone', 'stone', 'stone', 'stone', 'stone', 'stone']
+        ]
+      },
+      {
+        level: 3,
+        name: 'L3: Mid Drop Shaft',
+        grid: [
+          ['air', 'air', 'air', 'air', 'air', 'air', 'air'],
+          ['air', 'stone', 'stone', 'stone', 'stone', 'air', 'air'],
+          ['air', 'stone', 'chute', 'chute', 'stone', 'air', 'air'],
+          ['air', 'stone', 'chute', 'chute', 'stone', 'air', 'air'],
+          ['air', 'stone', 'stone', 'stone', 'stone', 'air', 'air'],
+          ['air', 'air', 'air', 'air', 'air', 'air', 'air'],
+          ['air', 'air', 'air', 'air', 'air', 'air', 'air']
+        ]
+      },
+      {
+        level: 4,
+        name: 'L4: Magma Platform & Trapdoors',
+        grid: [
+          ['magma', 'magma', 'magma', 'magma', 'magma', 'magma', 'magma'],
+          ['magma', 'magma', 'magma', 'magma', 'magma', 'magma', 'magma'],
+          ['magma', 'magma', 'trapdoor', 'trapdoor', 'magma', 'magma', 'magma'],
+          ['magma', 'magma', 'trapdoor', 'trapdoor', 'magma', 'magma', 'magma'],
+          ['magma', 'magma', 'magma', 'magma', 'magma', 'magma', 'magma'],
+          ['magma', 'magma', 'magma', 'magma', 'magma', 'magma', 'magma'],
+          ['magma', 'magma', 'magma', 'magma', 'magma', 'magma', 'magma']
+        ]
+      },
+      {
+        level: 5,
+        name: 'L5: Obsidian Portal Sill',
+        grid: [
+          ['obsidian', 'obsidian', 'obsidian', 'obsidian', 'obsidian', 'obsidian', 'obsidian'],
+          ['obsidian', 'air', 'water', 'water', 'air', 'air', 'obsidian'],
+          ['obsidian', 'water', 'chute', 'chute', 'water', 'air', 'obsidian'],
+          ['obsidian', 'water', 'chute', 'chute', 'water', 'air', 'obsidian'],
+          ['obsidian', 'air', 'water', 'water', 'air', 'air', 'obsidian'],
+          ['obsidian', 'air', 'air', 'air', 'air', 'air', 'obsidian'],
+          ['obsidian', 'obsidian', 'obsidian', 'obsidian', 'obsidian', 'obsidian', 'obsidian']
+        ]
+      },
+      {
+        level: 6,
+        name: 'L6: Portal Energy & Columns',
+        grid: [
+          ['obsidian', 'air', 'air', 'air', 'air', 'air', 'obsidian'],
+          ['obsidian', 'portal', 'portal', 'portal', 'portal', 'portal', 'obsidian'],
+          ['obsidian', 'portal', 'portal', 'portal', 'portal', 'portal', 'obsidian'],
+          ['obsidian', 'portal', 'portal', 'portal', 'portal', 'portal', 'obsidian'],
+          ['obsidian', 'portal', 'portal', 'portal', 'portal', 'portal', 'obsidian'],
+          ['obsidian', 'portal', 'portal', 'portal', 'portal', 'portal', 'obsidian'],
+          ['obsidian', 'air', 'air', 'air', 'air', 'air', 'obsidian']
+        ]
+      },
+      {
+        level: 7,
+        name: 'L7: Upper Portal Columns',
+        grid: [
+          ['obsidian', 'air', 'air', 'air', 'air', 'air', 'obsidian'],
+          ['obsidian', 'portal', 'portal', 'portal', 'portal', 'portal', 'obsidian'],
+          ['obsidian', 'portal', 'portal', 'portal', 'portal', 'portal', 'obsidian'],
+          ['obsidian', 'portal', 'portal', 'portal', 'portal', 'portal', 'obsidian'],
+          ['obsidian', 'portal', 'portal', 'portal', 'portal', 'portal', 'obsidian'],
+          ['obsidian', 'portal', 'portal', 'portal', 'portal', 'portal', 'obsidian'],
+          ['obsidian', 'air', 'air', 'air', 'air', 'air', 'obsidian']
+        ]
+      },
+      {
+        level: 8,
+        name: 'L8: Obsidian Portal Cap',
+        grid: [
+          ['obsidian', 'obsidian', 'obsidian', 'obsidian', 'obsidian', 'obsidian', 'obsidian'],
+          ['obsidian', 'slab', 'slab', 'slab', 'slab', 'slab', 'obsidian'],
+          ['obsidian', 'slab', 'slab', 'slab', 'slab', 'slab', 'obsidian'],
+          ['obsidian', 'slab', 'slab', 'slab', 'slab', 'slab', 'obsidian'],
+          ['obsidian', 'slab', 'slab', 'slab', 'slab', 'slab', 'obsidian'],
+          ['obsidian', 'slab', 'slab', 'slab', 'slab', 'slab', 'obsidian'],
+          ['obsidian', 'obsidian', 'obsidian', 'obsidian', 'obsidian', 'obsidian', 'obsidian']
+        ]
+      }
+    ],
+    simulation: {
+      duration: 10000,
+      yieldRateText: '~680 Gold Ingots / Hr',
+      stages: [
+        {
+          id: 'portal_spawn',
+          label: 'Stage 1: Nether Portal Tick',
+          icon: '🔮',
+          start: 0,
+          end: 2200,
+          detail: 'Rapid portal block updates trigger continuous Zombified Piglin generation onto the platform.',
+          statusBanner: 'NETHER PORTAL TICK: ZOMBIFIED PIGLIN SPAWNED'
+        },
+        {
+          id: 'trapdoor_plunge',
+          label: 'Stage 2: Trapdoor Pathfinding',
+          icon: '🪵',
+          start: 2200,
+          end: 4400,
+          detail: 'Piglins treat open trapdoors as full walkable blocks and sprint forward into the center chute.',
+          statusBanner: 'PIGLINS PATHFINDING ACROSS TRAPDOORS INTO CHUTE'
+        },
+        {
+          id: 'fall_softening',
+          label: 'Stage 3: 22-Block Gravity Softening',
+          icon: '🕳️',
+          start: 4400,
+          end: 6400,
+          detail: 'Gravity chute drop strips Piglin health down to half a heart for instant finishing.',
+          statusBanner: 'FALL DAMAGE APPLIED: SOFTENED TO HALF-HEART'
+        },
+        {
+          id: 'looting_strike',
+          label: 'Stage 4: Sweeping Blade Neutralization',
+          icon: '⚔️',
+          start: 6400,
+          end: 8000,
+          detail: 'Entity crusher or sweeping blade defeats softened piglins, yielding gold nuggets, ingots, and XP.',
+          statusBanner: 'PIGLINS HARVESTED: EXP & GOLD DROPS EMITTED'
+        },
+        {
+          id: 'hopper_funnel',
+          label: 'Stage 5: Hopper Collection',
+          icon: '📥',
+          start: 8000,
+          end: 9200,
+          detail: 'High-speed hoppers below slabs filter gold nuggets, golden swords, and ingots into the sorter.',
+          statusBanner: 'HOPPERS COLLECTING GOLD DROPS'
+        },
+        {
+          id: 'vault_store',
+          label: 'Stage 6: Gold Vault Deposit',
+          icon: '🪙',
+          start: 9200,
+          end: 10000,
+          detail: 'Hoppers store 100% pure gold harvest directly into double vault chests.',
+          statusBanner: '✓ CYCLE COMPLETE: +8 GOLD NUGGETS, +1 GOLD INGOT STORED',
+          storedItemsText: '+8 Gold Nuggets, +1 Gold Ingot, +2 Rotten Flesh'
+        }
+      ],
+      entities: [
+        {
+          id: 'piglin_1',
+          type: 'zombie',
+          name: 'Zombified Piglin',
+          icon: '🐷',
+          position: { x: 3, y: 4.2, z: 1 },
+          spawnTime: 0,
+          despawnTime: 6400,
+          damageStartTime: 5200,
+          path: [
+            { time: 0, x: 5.0, y: 4.5, z: 2.0 },
+            { time: 2200, x: 3.5, y: 4.5, z: 2.5 },
+            { time: 4400, x: 3.0, y: 3.5, z: 3.0 },
+            { time: 5400, x: 3.0, y: 1.5, z: 3.0 },
+            { time: 6400, x: 3.0, y: 1.2, z: 3.0 }
+          ]
+        },
+        {
+          id: 'gold_ingot_drop',
+          type: 'gold_block',
+          name: 'Gold Ingot',
+          icon: '🪙',
+          spawnTime: 6400,
+          despawnTime: 9500,
+          path: [
+            { time: 6400, x: 3.0, y: 1.2, z: 3.0 },
+            { time: 7400, x: 3.0, y: 0.8, z: 2.5 },
+            { time: 8400, x: 2.5, y: 0.3, z: 2.2 },
+            { time: 9500, x: 1.5, y: 0.3, z: 2.2 }
+          ]
+        }
+      ]
+    }
+  },
+
+  medieval_tower: {
+    type: 'build',
+    title: 'Medieval Watchtower Blueprint',
+    edition: 'Any Edition',
+    dimensions: { width: 5, length: 5, height: 10 },
+    materials: [
+      { id: 'stone_bricks', name: 'Stone Bricks', quantity: 128, icon: '🧱' },
+      { id: 'cobblestone', name: 'Cobblestone', quantity: 64, icon: '🪨' },
+      { id: 'oak_logs', name: 'Oak Logs', quantity: 32, icon: '🪵' },
+      { id: 'oak_planks', name: 'Spruce / Oak Planks', quantity: 32, icon: '🪵' },
+      { id: 'stair', name: 'Stone Brick Stairs', quantity: 24, icon: '🪜' },
+      { id: 'slab', name: 'Stone Slabs', quantity: 16, icon: '➖' },
+      { id: 'torch', name: 'Wall Torches', quantity: 8, icon: '🕯️' },
+      { id: 'door', name: 'Arched Door', quantity: 1, icon: '🚪' }
+    ],
+    steps: [
+      { number: 1, title: 'Cobblestone Ring Foundation', description: 'Lay a solid 5x5 cobblestone foundation with interior earthen floor.', layer: 1 },
+      { number: 2, title: 'Corner Oak Pillars & Entry', description: 'Raise 4 corner oak logs and stone brick walls with arched doorway.', layer: 2 },
+      { number: 3, title: 'Lower Arrow Slit Apertures', description: 'Build stone brick walls with 1-block central arrow slits on all faces.', layer: 3 },
+      { number: 4, title: 'Mid-Level Sentry Floor', description: 'Lay spruce plank deck with ladder opening and equipment cache.', layer: 4 },
+      { number: 5, title: 'Upper Sentry Chamber', description: 'Raise upper stone walls with defensive window gaps.', layer: 5 },
+      { number: 6, title: 'Overhanging Machicolations', description: 'Stair-step inverted stone brick stairs 1 block out from perimeter.', layer: 6 },
+      { number: 7, title: 'Crenellated Parapet Battlements', description: 'Place alternating stone brick blocks and torches for 360-degree archer cover.', layer: 7 }
+    ],
+    layers: [
+      {
+        level: 1,
+        name: 'L1: Cobblestone Base',
+        grid: [
+          ['cobble', 'cobble', 'cobble', 'cobble', 'cobble'],
+          ['cobble', 'cobble', 'cobble', 'cobble', 'cobble'],
+          ['cobble', 'cobble', 'cobble', 'cobble', 'cobble'],
+          ['cobble', 'cobble', 'cobble', 'cobble', 'cobble'],
+          ['cobble', 'cobble', 'cobble', 'cobble', 'cobble']
+        ]
+      },
+      {
+        level: 2,
+        name: 'L2: Entrance & Corner Pillars',
+        grid: [
+          ['log', 'stone', 'stone', 'stone', 'log'],
+          ['stone', 'air', 'air', 'air', 'stone'],
+          ['stone', 'air', 'air', 'air', 'stone'],
+          ['stone', 'air', 'air', 'air', 'stone'],
+          ['log', 'stone', 'door', 'stone', 'log']
+        ]
+      },
+      {
+        level: 3,
+        name: 'L3: Lower Arrow Slits',
+        grid: [
+          ['log', 'stone', 'air', 'stone', 'log'],
+          ['stone', 'air', 'air', 'air', 'stone'],
+          ['air', 'air', 'ladder', 'air', 'air'],
+          ['stone', 'air', 'air', 'air', 'stone'],
+          ['log', 'stone', 'air', 'stone', 'log']
+        ]
+      },
+      {
+        level: 4,
+        name: 'L4: Sentry Deck Floor',
+        grid: [
+          ['log', 'plank', 'plank', 'plank', 'log'],
+          ['plank', 'plank', 'plank', 'plank', 'plank'],
+          ['plank', 'plank', 'air', 'plank', 'plank'],
+          ['plank', 'plank', 'plank', 'plank', 'plank'],
+          ['log', 'plank', 'plank', 'plank', 'log']
+        ]
+      },
+      {
+        level: 5,
+        name: 'L5: Upper Watch Deck',
+        grid: [
+          ['stone', 'stone', 'air', 'stone', 'stone'],
+          ['stone', 'torch', 'air', 'torch', 'stone'],
+          ['air', 'air', 'air', 'air', 'air'],
+          ['stone', 'torch', 'air', 'torch', 'stone'],
+          ['stone', 'stone', 'air', 'stone', 'stone']
+        ]
+      },
+      {
+        level: 6,
+        name: 'L6: Overhanging Machicolations',
+        grid: [
+          ['stair', 'stair', 'stair', 'stair', 'stair'],
+          ['stair', 'stone', 'stone', 'stone', 'stair'],
+          ['stair', 'stone', 'air', 'stone', 'stair'],
+          ['stair', 'stone', 'stone', 'stone', 'stair'],
+          ['stair', 'stair', 'stair', 'stair', 'stair']
+        ]
+      },
+      {
+        level: 7,
+        name: 'L7: Parapet Battlements',
+        grid: [
+          ['stone', 'air', 'stone', 'air', 'stone'],
+          ['air', 'air', 'air', 'air', 'air'],
+          ['stone', 'air', 'torch', 'air', 'stone'],
+          ['air', 'air', 'air', 'air', 'air'],
+          ['stone', 'air', 'stone', 'air', 'stone']
+        ]
+      }
+    ],
+    simulation: {
+      duration: 8000,
+      yieldRateText: '360° Sentry Defense Radius',
+      stages: [
+        {
+          id: 'ground_scan',
+          label: 'Stage 1: Ground Perimeter Watch',
+          icon: '🛡️',
+          start: 0,
+          end: 2000,
+          detail: 'Sentry monitors surrounding valley from reinforced ground entrance.',
+          statusBanner: 'GROUND PERIMETER SECURED'
+        },
+        {
+          id: 'hostile_spotted',
+          label: 'Stage 2: Hostile Mob Sighting',
+          icon: '👀',
+          start: 2000,
+          end: 4000,
+          detail: 'Outpost watch detects hostile pillager scout party approaching the frontier.',
+          statusBanner: 'HOSTILE SCOUTS DETECTED: ELEVATING TO SENTRY DECK'
+        },
+        {
+          id: 'arrow_slit_volley',
+          label: 'Stage 3: Arrow Slit Defense Volley',
+          icon: '🏹',
+          start: 4000,
+          end: 6000,
+          detail: 'Archers utilize narrow 1-block arrow slits for total cover while returning fire.',
+          statusBanner: 'ARROW SLIT VOLLEY ENGAGED: ZERO SENTRY EXPOSURE'
+        },
+        {
+          id: 'battlements_clear',
+          label: 'Stage 4: Battlements Crown All-Clear',
+          icon: '🏰',
+          start: 6000,
+          end: 8000,
+          detail: 'Frontier secured from overhanging crown machicolations. Watchtower rotation complete.',
+          statusBanner: '✓ TOWER DEFENSE CYCLE COMPLETE: PERIMETER RESTORED'
+        }
+      ]
+    }
+  },
+
   iron_farm: {
     type: 'build',
     title: 'Compact Iron Golem Farm',
@@ -460,64 +835,77 @@ export function parseVisualizationData(messageContent, userPrompt = '', activeMo
     }
   }
 
-  // 2. Keyword & mode heuristic matching
+  // 2. Keyword & semantic matching for dedicated canonical blueprints
   const combined = (userPrompt + ' ' + messageContent).toLowerCase();
+
+  // BUILD: Gold Farm (Zombie Piglin Nether Portal Farm)
+  if (
+    combined.includes('gold farm') ||
+    combined.includes('piglin farm') ||
+    (combined.includes('zombie piglin') && combined.includes('farm')) ||
+    (combined.includes('gold') && combined.includes('farm') && !combined.includes('iron'))
+  ) {
+    return CANONICAL_TEMPLATES.gold_farm;
+  }
 
   // BUILD: Iron Farm
   if (combined.includes('iron farm') || (combined.includes('golem') && combined.includes('farm'))) {
     return CANONICAL_TEMPLATES.iron_farm;
   }
 
-  // BUILD: Starter House / Cottage / Base
-  if (combined.includes('starter house') || combined.includes('starter base') || combined.includes('cottage') || combined.includes('simple house')) {
-    return CANONICAL_TEMPLATES.starter_house;
+  // BUILD: Medieval Tower / Watchtower
+  if (
+    combined.includes('medieval tower') ||
+    combined.includes('watchtower') ||
+    (combined.includes('tower') && (combined.includes('medieval') || combined.includes('stone') || combined.includes('sentry')))
+  ) {
+    return CANONICAL_TEMPLATES.medieval_tower;
   }
 
-  // BUILD: Medieval Tower / Castle
-  if (combined.includes('tower') || combined.includes('castle') || (combined.includes('build') && activeMode === 'BUILD' && combined.includes('step'))) {
-    return {
-      ...CANONICAL_TEMPLATES.starter_house,
-      title: 'Medieval Watchtower Blueprint',
-      dimensions: { width: 5, length: 5, height: 14 }
-    };
+  // BUILD: Starter House / Cottage / Base
+  if (
+    combined.includes('starter house') ||
+    combined.includes('starter base') ||
+    combined.includes('starter cottage') ||
+    combined.includes('cozy cottage') ||
+    combined.includes('simple house')
+  ) {
+    return CANONICAL_TEMPLATES.starter_house;
   }
 
   // REDSTONE: Piston Door / Doorway
-  if (combined.includes('piston door') || combined.includes('2x2 door') || combined.includes('flush door') || combined.includes('hidden door')) {
+  if (
+    combined.includes('piston door') ||
+    combined.includes('2x2 door') ||
+    combined.includes('flush door') ||
+    combined.includes('hidden door') ||
+    (activeMode === 'REDSTONE' && combined.includes('door'))
+  ) {
     return CANONICAL_TEMPLATES.piston_door;
   }
 
-  // REDSTONE: General circuit / lamp / clock
-  if (activeMode === 'REDSTONE' || combined.includes('redstone') || combined.includes('comparator') || combined.includes('circuit')) {
-    return {
-      ...CANONICAL_TEMPLATES.piston_door,
-      title: combined.includes('lamp') ? 'Redstone Lamp Switch Circuit' : 'Redstone Logic Circuit',
-      subtitle: 'Powered signal distribution and inverter demonstration'
-    };
-  }
-
   // SURVIVAL: Ender dragon / Nether
-  if (combined.includes('ender dragon') || combined.includes('dragon') || combined.includes('the end')) {
+  if (
+    combined.includes('ender dragon') ||
+    combined.includes('dragon fight') ||
+    combined.includes('beat the dragon') ||
+    combined.includes('the end crystals') ||
+    (activeMode === 'SURVIVAL' && (combined.includes('dragon') || combined.includes('boss')))
+  ) {
     return CANONICAL_TEMPLATES.ender_dragon;
   }
 
-  if (activeMode === 'SURVIVAL' || combined.includes('nether') || combined.includes('preparation') || combined.includes('progression')) {
-    return {
-      ...CANONICAL_TEMPLATES.ender_dragon,
-      title: combined.includes('nether') ? 'Nether Expedition Readiness' : 'Survival Mastery Checklist',
-      subtitle: 'Essential survival milestones and gear requirements'
-    };
-  }
-
-  // CREATE: Mod / Datapack / Commands / Sword
-  if (combined.includes('sword mod') || combined.includes('custom sword') || combined.includes('custom item') || activeMode === 'CREATE' || combined.includes('datapack')) {
+  // CREATE: Mod / Datapack / Custom Sword
+  if (
+    combined.includes('sword mod') ||
+    combined.includes('custom sword') ||
+    combined.includes('custom item') ||
+    (activeMode === 'CREATE' && (combined.includes('sword') || combined.includes('item')))
+  ) {
     return CANONICAL_TEMPLATES.custom_sword;
   }
 
-  // General Fallback by active mode if instructions contain numbered steps
-  if (activeMode === 'BUILD' && (messageContent.includes('1.') || messageContent.includes('Step 1'))) {
-    return CANONICAL_TEMPLATES.starter_house;
-  }
-
+  // STRICT REQUIREMENT: If the response has no valid BuildModel, return null.
+  // NEVER substitute sample, demo, or unrelated blueprints (e.g. Medieval Watchtower for Gold Farm).
   return null;
 }

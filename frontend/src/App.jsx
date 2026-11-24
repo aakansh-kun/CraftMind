@@ -72,6 +72,10 @@ export default function App() {
     setError(null);
     setLoading(true);
 
+    // Immediately clear active visualization and close visualizer
+    setActiveVisualization(null);
+    setIsVisualizerOpen(false);
+
     try {
       // 1. Fetch conversation messages
       const msgRes = await fetch(`${API_BASE}/sessions/${session.id}/messages`);
@@ -81,9 +85,13 @@ export default function App() {
           let viz = null;
           if (m.role === 'assistant') {
             viz = parseVisualizationData(m.content, '', session.mode || 'BUILD');
+            if (viz) {
+              viz.sessionId = session.id;
+              viz.messageId = m.id || idx;
+            }
           }
           return {
-            id: Date.now() + idx,
+            id: m.id || (Date.now() + idx),
             role: m.role,
             content: m.content,
             metadata: m.metadata,
@@ -171,6 +179,13 @@ export default function App() {
     setInputMessage('');
     setLoading(true);
 
+    // Synchronize visualizer: Never display stale blueprint from previous query
+    if (isVisualizerOpen) {
+      setActiveVisualization({ status: 'generating' });
+    } else {
+      setActiveVisualization(null);
+    }
+
     try {
       const headers = {
         'Content-Type': 'application/json',
@@ -209,6 +224,9 @@ export default function App() {
       } else {
         // Parse structured visualization data
         const viz = parseVisualizationData(data.reply, trimmed, activeMode);
+        if (viz) {
+          viz.sessionId = sessionId;
+        }
 
         const assistantMsg = {
           role: 'assistant',
@@ -220,7 +238,7 @@ export default function App() {
 
         setMessages((prev) => [...prev, assistantMsg]);
 
-        // Auto-open visualizer if structured blueprint was detected
+        // Auto-open visualizer ONLY if structured blueprint was genuinely generated
         if (viz) {
           setActiveVisualization(viz);
           setIsVisualizerOpen(true);
@@ -231,6 +249,18 @@ export default function App() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ type: activeMode, data: viz }),
           }).catch((err) => console.warn('Failed to persist visualization:', err));
+        } else {
+          // If no valid blueprint exists for this response, show explicit notice or close
+          if (isVisualizerOpen) {
+            setActiveVisualization({ noVisualization: true });
+          } else {
+            setActiveVisualization(null);
+          }
+
+          // Clear any old stored visualization for this session in SQLite
+          fetch(`${API_BASE}/sessions/${sessionId}/visualization`, {
+            method: 'DELETE',
+          }).catch((err) => console.warn('Failed to clear visualization in SQLite:', err));
         }
 
         // Refresh recent sessions so title appears in sidebar
@@ -263,7 +293,7 @@ export default function App() {
       {/* Top HUD */}
       <TopHUD
         activeMode={activeMode}
-        hasVisualizer={Boolean(activeVisualization)}
+        hasVisualizer={Boolean(activeVisualization && !activeVisualization.noVisualization && !activeVisualization.status)}
         isVisualizerOpen={isVisualizerOpen}
         onToggleVisualizer={() => setIsVisualizerOpen(!isVisualizerOpen)}
         sessionId={sessionId}

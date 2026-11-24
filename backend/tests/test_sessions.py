@@ -67,10 +67,14 @@ def test_deterministic_title_generation():
     from app.services.session_service import derive_title
 
     assert derive_title("how to build iron farm") == "Iron Farm Build"
+    assert derive_title("how do i build a gold farm") == "Gold Farm Build"
+    assert derive_title("How do I build a gold farm?") == "Gold Farm Build"
+    assert derive_title("How do I build a medieval tower?") == "Medieval Tower Build"
     assert derive_title("give me steps to build a medieval castle") == "Medieval Castle"
     assert derive_title("how do i make a 2x2 piston door") == "2×2 Piston Door"
     assert derive_title("what should i take to fight the ender dragon") == "Ender Dragon Preparation"
     assert derive_title("help me create a custom sword mod") == "Custom Sword Mod"
+    assert derive_title("how do i make an automatic melon farm") == "Automatic Melon Farm"
     assert derive_title("   ") == "New CraftMind Chat"
 
 
@@ -113,12 +117,20 @@ def test_session_listing_and_deletion(client):
     assert get_viz_res.status_code == 200
     assert get_viz_res.json()["data"]["title"] == "Iron Farm"
 
-    # 3. Delete session
+    # 3. Test clearing visualization specifically
+    clear_viz_res = client.delete(f"/sessions/{session_id}/visualization")
+    assert clear_viz_res.status_code == 200
+    assert client.get(f"/sessions/{session_id}/visualization").status_code == 404
+
+    # 4. Re-save for full session deletion test
+    client.post(f"/sessions/{session_id}/visualization", json=viz_payload)
+
+    # 5. Delete session
     del_res = client.delete(f"/sessions/{session_id}")
     assert del_res.status_code == 200
     assert del_res.json()["status"] == "deleted"
 
-    # 4. Verify messages are gone (returns 404)
+    # 6. Verify messages are gone (returns 404)
     assert client.get(f"/sessions/{session_id}/messages").status_code == 404
-    # 5. Verify visualization is gone (returns 404)
+    # 7. Verify visualization is gone (returns 404)
     assert client.get(f"/sessions/{session_id}/visualization").status_code == 404

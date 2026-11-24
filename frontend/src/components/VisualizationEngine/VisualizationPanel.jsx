@@ -7,6 +7,70 @@ import CreateVisualizer from './CreateVisualizer';
 export default function VisualizationPanel({ data, onClose, mode }) {
   if (!data) return null;
 
+  // Case 1: Temporary generating state while awaiting new response
+  if (data.status === 'generating') {
+    return (
+      <div className="visualizer-panel">
+        <div className="panel-header">
+          <div className="panel-title-group">
+            <span className="panel-badge" style={{ borderColor: '#eab308', color: '#eab308' }}>
+              ⏳ PROCESSING
+            </span>
+            <h2 className="panel-title">GENERATING BLUEPRINT...</h2>
+            <p className="panel-subtitle">Computing spatial block coordinates and simulation kinetics</p>
+          </div>
+          <button
+            type="button"
+            className="panel-close-btn"
+            onClick={onClose}
+            title="Minimize Visualizer"
+          >
+            ✕
+          </button>
+        </div>
+        <div className="panel-body" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 24px', textAlign: 'center', minHeight: '320px' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⛏️</div>
+          <h3 style={{ color: '#f8fafc', fontSize: '1.25rem', marginBottom: '0.5rem', fontFamily: 'monospace' }}>GENERATING BLUEPRINT...</h3>
+          <p style={{ color: '#94a3b8', fontSize: '0.9rem', maxWidth: '360px', margin: '0 auto', lineHeight: '1.5' }}>
+            CraftMind is analyzing the response, preparing block manifests, layer projections, and kinetic animation parameters.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Case 2: No visualization available for this response
+  if (data.noVisualization) {
+    return (
+      <div className="visualizer-panel">
+        <div className="panel-header">
+          <div className="panel-title-group">
+            <span className="panel-badge" style={{ borderColor: '#64748b', color: '#94a3b8' }}>
+              ℹ️ NOTICE
+            </span>
+            <h2 className="panel-title">No Visualization Available</h2>
+            <p className="panel-subtitle">For this response</p>
+          </div>
+          <button
+            type="button"
+            className="panel-close-btn"
+            onClick={onClose}
+            title="Minimize Visualizer"
+          >
+            ✕
+          </button>
+        </div>
+        <div className="panel-body" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 24px', textAlign: 'center', minHeight: '320px' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem', opacity: 0.6 }}>📐</div>
+          <h3 style={{ color: '#f8fafc', fontSize: '1.15rem', marginBottom: '0.5rem', fontFamily: 'monospace' }}>No visualization available for this response.</h3>
+          <p style={{ color: '#94a3b8', fontSize: '0.875rem', maxWidth: '380px', margin: '0 auto', lineHeight: '1.5' }}>
+            The assistant generated instructions above, but no structured 3D spatial model or schematic applies to this specific query. Unrelated blueprints are never substituted.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   const type = data.type || (mode ? mode.toLowerCase() : 'build');
 
   const getModeBadge = () => {

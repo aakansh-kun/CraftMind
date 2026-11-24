@@ -13,6 +13,7 @@ from app.services.session_service import (
     delete_session,
     save_visualization,
     get_visualization,
+    delete_visualization,
 )
 
 router = APIRouter(tags=["sessions"])
@@ -64,6 +65,15 @@ def get_session_viz(session_id: str) -> VisualizationResponse:
     if not viz:
         raise HTTPException(status_code=404, detail="visualization not found")
     return VisualizationResponse(**viz)
+
+
+@router.delete("/sessions/{session_id}/visualization")
+def clear_session_viz(session_id: str):
+    """
+    Clears any persisted visualization for a session.
+    """
+    delete_visualization(session_id)
+    return {"status": "cleared", "session_id": session_id}
 
 
 @router.post("/sessions/{session_id}/visualization", response_model=VisualizationResponse)

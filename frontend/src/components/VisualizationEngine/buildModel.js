@@ -271,6 +271,57 @@ export const BLOCK_CATALOG = {
     rightColor: '#000000',
     pattern: 'void',
     textColor: '#78716c',
+  },
+  obsidian: {
+    id: 'obsidian',
+    name: 'Obsidian Portal Frame',
+    icon: '🔮',
+    topColor: '#3b0764',
+    leftColor: '#2e1065',
+    rightColor: '#1e1b4b',
+    pattern: 'dark',
+    textColor: '#ffffff',
+  },
+  magma: {
+    id: 'magma',
+    name: 'Magma Spawning Block',
+    icon: '🌋',
+    topColor: '#ea580c',
+    leftColor: '#c2410c',
+    rightColor: '#7c2d12',
+    pattern: 'lava',
+    textColor: '#ffffff',
+  },
+  gold_block: {
+    id: 'gold_block',
+    name: 'Block of Gold',
+    icon: '🪙',
+    topColor: '#facc15',
+    leftColor: '#eab308',
+    rightColor: '#ca8a04',
+    pattern: 'smooth',
+    textColor: '#0f172a',
+  },
+  trapdoor: {
+    id: 'trapdoor',
+    name: 'Oak Trapdoor (Lure)',
+    icon: '🪵',
+    topColor: '#b45309',
+    leftColor: '#92400e',
+    rightColor: '#78350f',
+    pattern: 'wood',
+    textColor: '#ffffff',
+  },
+  portal: {
+    id: 'portal',
+    name: 'Nether Portal Film',
+    icon: '🌀',
+    topColor: '#a855f7',
+    leftColor: '#9333ea',
+    rightColor: '#7e22ce',
+    pattern: 'glass',
+    textColor: '#ffffff',
+    isTransparent: true,
   }
 };
 
@@ -305,6 +356,11 @@ export function normalizeBlockType(raw) {
   if (clean.includes('repeater')) return 'repeater';
   if (clean.includes('redstone') || clean.includes('wire')) return 'redstone_wire';
   if (clean.includes('lever')) return 'lever';
+  if (clean.includes('obsidian')) return 'obsidian';
+  if (clean.includes('magma')) return 'magma';
+  if (clean.includes('gold')) return 'gold_block';
+  if (clean.includes('trapdoor')) return 'trapdoor';
+  if (clean.includes('portal')) return 'portal';
   if (clean.includes('hole') || clean.includes('chute')) return 'chute';
   if (clean.includes('air') || clean === 'none' || clean === 'empty') return 'air';
 

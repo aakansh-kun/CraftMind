@@ -27,14 +27,18 @@ def derive_title(message: str) -> str:
         return "Ender Dragon Preparation"
     if "iron farm" in lower or "iron golem farm" in lower:
         return "Iron Farm Build"
+    if "gold farm" in lower or "zombie piglin farm" in lower or "piglin farm" in lower:
+        return "Gold Farm Build"
+    if "medieval tower" in lower or "watchtower" in lower:
+        return "Medieval Tower Build"
+    if "medieval castle" in lower:
+        return "Medieval Castle"
     if "piston door" in lower:
         if "2x2" in lower or "2*2" in lower or "2 by 2" in lower:
             return "2×2 Piston Door"
         return "Piston Door Build"
     if "sword mod" in lower or "custom sword" in lower:
         return "Custom Sword Mod"
-    if "medieval castle" in lower:
-        return "Medieval Castle"
     if "creeper farm" in lower:
         return "Creeper Farm"
     if "mob farm" in lower or "mob trap" in lower:
@@ -46,22 +50,22 @@ def derive_title(message: str) -> str:
 
     # Strip conversational prefixes
     patterns = [
-        r"^(can you\s+)?(please\s+)?(how\s+to\s+(build|make|craft|design|create))\s+(a|an|the)?\s*",
-        r"^(can you\s+)?(please\s+)?(how\s+do\s+i\s+(build|make|craft|design|create))\s+(a|an|the)?\s*",
-        r"^(give\s+me\s+)?(steps\s+(to|for)\s+(build|make|craft|design|create))\s+(a|an|the)?\s*",
-        r"^(give\s+me\s+)?(steps\s+(to|for))\s+(a|an|the)?\s*",
-        r"^(help\s+me\s+)(build|make|craft|design|create)\s+(a|an|the)?\s*",
-        r"^(tell\s+me\s+how\s+to\s+)(build|make|craft|design|create)\s+(a|an|the)?\s*",
-        r"^(what\s+is\s+the\s+best\s+way\s+to\s+)(build|make|craft|design|create)\s+(a|an|the)?\s*",
+        r"^(can you\s+)?(please\s+)?(how\s+to\s+(build|make|craft|design|create))\s+(an|a|the)?\s*",
+        r"^(can you\s+)?(please\s+)?(how\s+do\s+i\s+(build|make|craft|design|create))\s+(an|a|the)?\s*",
+        r"^(give\s+me\s+)?(steps\s+(to|for)\s+(build|make|craft|design|create))\s+(an|a|the)?\s*",
+        r"^(give\s+me\s+)?(steps\s+(to|for))\s+(an|a|the)?\s*",
+        r"^(help\s+me\s+)(build|make|craft|design|create)\s+(an|a|the)?\s*",
+        r"^(tell\s+me\s+how\s+to\s+)(build|make|craft|design|create)\s+(an|a|the)?\s*",
+        r"^(what\s+is\s+the\s+best\s+way\s+to\s+)(build|make|craft|design|create)\s+(an|a|the)?\s*",
         r"^(what\s+should\s+i\s+(take|bring|prepare)\s+(to|for)\s+)?(fight|beat)?\s*(the)?\s*",
-        r"^(guide\s+(to|for)\s+(building|making)?)\s+(a|an|the)?\s*",
+        r"^(guide\s+(to|for)\s+(building|making)?)\s+(an|a|the)?\s*",
         r"^(how\s+to\s+)",
         r"^(how\s+do\s+i\s+)",
     ]
     result = clean
     for pat in patterns:
         sub = re.sub(pat, "", result, flags=re.IGNORECASE).strip()
-        if sub and len(sub) > 2:
+        if sub != result and len(sub) > 2:
             result = sub
             break
 
@@ -264,6 +268,16 @@ def save_visualization(session_id: str, viz_type: str, viz_data: Dict[str, Any])
             """,
             (session_id, viz_type, raw_data, now, now),
         )
+        conn.commit()
+
+
+def delete_visualization(session_id: str) -> None:
+    """
+    Deletes any stored visualization for a session.
+    """
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM visualizations WHERE session_id = ?;", (session_id,))
         conn.commit()
 
 
