@@ -53,3 +53,5 @@ frontend/dist-ssr/
 *.swo
 .DS_Store
 Thumbs.db
+render.exe
+render
