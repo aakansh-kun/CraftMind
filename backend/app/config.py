@@ -16,8 +16,8 @@ class Settings(BaseSettings):
     GROQ_API_KEY: str = ""
 
     # Models
-    GEMINI_MODEL: str = "gemini/gemini-1.5-flash"
-    GROQ_MODEL: str = "groq/llama-3.3-70b-versatile"
+    GEMINI_MODEL: str = "gemini/gemini-flash-lite-latest"
+    GROQ_MODEL: str = "groq/openai/gpt-oss-120b"
 
     # Key Mapping (Internal key_1 -> Gemini, key_2 -> Groq)
     LLM_API_KEYS: str = "key_1:gemini,key_2:groq"

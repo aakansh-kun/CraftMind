@@ -14,7 +14,7 @@ services:
       - key: GEMINI_MODEL
         value: gemini/gemini-flash-lite-latest
       - key: GROQ_MODEL
-        value: groq/openai/gpt-oss-20b
+        value: groq/openai/gpt-oss-120b
       - key: LLM_API_KEYS
         value: key_1:gemini,key_2:groq
       - key: DATABASE_URL
