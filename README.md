@@ -6,12 +6,21 @@ The system is built strictly according to specification with high-reliability de
 
 ---
 
-## 1. Live URLs
+## 1. Live Showcase & Deployments
 
-- **Frontend Application**: [http://localhost:3000](http://localhost:3000)
-- **Backend API**: [http://localhost:8000](http://localhost:8000)
-- **API Documentation (Swagger UI)**: [http://localhost:8000/docs](http://localhost:8000/docs)
-- **Health Check Endpoint**: [http://localhost:8000/health](http://localhost:8000/health)
+| Resource | URL | Description |
+| :--- | :--- | :--- |
+| **Frontend Application (Vercel)** | [https://craftmind-frontend.vercel.app](https://craftmind-frontend.vercel.app) | Live React UI with real-time isometric 3D voxel visualizer |
+| **Backend API (Render)** | [https://craftmind.onrender.com](https://craftmind.onrender.com) | FastAPI backend with LiteLLM primary/fallback routing |
+| **API Docs (Swagger UI)** | [https://craftmind.onrender.com/docs](https://craftmind.onrender.com/docs) | Interactive OpenAPI / Swagger test console |
+| **Health Check Endpoint** | [https://craftmind.onrender.com/health](https://craftmind.onrender.com/health) | Live system status, key configuration, & cache state |
+
+> **Note**: The backend runs on Render's free tier, which sleeps after inactivity. If the service is waking from a cold start, the first request may take ~30–50 seconds to initialize.
+
+### Local Development URLs
+- **Local Frontend**: [http://localhost:3000](http://localhost:3000)
+- **Local Backend**: [http://localhost:8000](http://localhost:8000)
+- **Local Health Check**: [http://localhost:8000/health](http://localhost:8000/health)
 
 ---
 
@@ -365,3 +374,6 @@ curl -X GET http://localhost:8000/sessions/nonexistent-session/messages
    - Expandable prompt customization with the required `data-testid="system-prompt-input"`.
 4. **Resilient Local/Docker SQLite Resolver**:
    - Backend automatically detects whether `/data` is writable (Docker volume) or if running locally on Windows/macOS, falling back safely to `./data/app.db` without crashing.
+5. **Interactive 2.5D Isometric 3D Build Visualizer**:
+   - High-fidelity voxel visualizer supporting 3D isometric projection, top-layer slice, and front elevation views.
+   - Dynamic `craftmind-viz` structured blueprint parsing for arbitrary user builds (e.g., Sugarcane Farm, Creeper Farm, Nether Hub, Modern Villa) with coordinate safety validation, block type normalization, and layer-by-layer construction simulation.
